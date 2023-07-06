@@ -1,0 +1,63 @@
+﻿<Window x:Class="DynamicPopupExample.Popup.Views.DialogView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DynamicPopupExample.Popup.Views"
+        xmlns:viewModels="clr-namespace:DynamicPopupExample.Popup.ViewModels"
+        xmlns:presentation="clr-namespace:DynamicPopupExample.Popup.Presentation"
+        mc:Ignorable="d"
+        Title="DialogView" 
+        Height="300"
+        Width="500"
+        d:DataContext="{d:DesignInstance viewModels:DialogViewModel}">
+    <Window.Resources>
+        <DataTemplate x:Key="TextInputDataTemplate"
+                      DataType="{x:Type viewModels:TextInputViewModel}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" 
+                           Text="{Binding Label, Mode=OneWay}"
+                           Margin="0,0,5,0"/>
+                <TextBox Grid.Column="1" 
+                         Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Stretch"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DefaultInputDataTemplate"
+                      DataType="{x:Type viewModels:IInputViewModel}">
+            <TextBlock Text="{Binding Label, Mode=OneWay}"/>
+        </DataTemplate>
+
+        <presentation:DialogInputDataTemplateSelector DefaultTemplate="{StaticResource DefaultInputDataTemplate}"
+                                                      TextInputTemplate="{StaticResource TextInputDataTemplate}"
+                                                      x:Key="DialogInputDataTemplateSelector"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0">
+            <ItemsControl ItemsSource="{Binding Inputs, Mode=OneWay}"
+                          ItemTemplateSelector="{StaticResource DialogInputDataTemplateSelector}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Button Grid.Row="1" 
+                Content="Ok u can close now"
+                HorizontalAlignment="Right"
+                Padding="10,5"
+                Margin="5"
+                Click="OnCloseButtonClick"/>
+    </Grid>
+</Window>

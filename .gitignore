@@ -1,0 +1,18 @@
+.fake
+.ionide
+.vs
+bin
+obj
+packages
+
+x64
+Release
+
+.idea/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
